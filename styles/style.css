@@ -1,0 +1,71 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    width: 100%vw;
+    height: 100vh;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: black;
+    color: #fff;
+}
+header{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 10rem;
+    width: 100%;
+    border-bottom: 4px solid gray;
+    
+}
+.container-icon > svg{
+    height: 5rem;
+    width: 5rem;
+}
+.container-items{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #fff;
+    height: 100%;
+}
+.item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 20rem;
+    border: 3px solid  rgb(206, 206, 206);
+    border-radius: 20%;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #525050;
+}
+.item > figure > img{
+    width: 15rem;
+    height: 15rem;
+    filter: drop-shadow(
+        0 0 10px rgb(236, 236, 236)
+    );
+}
+.inf-produc{
+    margin-top: 1rem;
+    border-top:2px solid gray ;
+    display: flex;
+    flex-direction: column;
+    justify-content:center ;
+    align-items: center;
+    gap: 1rem;
+}
+.añadir-carrito{
+    padding: 1rem;
+    background-color: rgb(61, 61, 61);
+    color: #fff;
+    border:2px double #fff;
+    border-radius:15rem ;
+}
+.bi {
+    color: #fff;
+}
