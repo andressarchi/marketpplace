@@ -1,10 +1,15 @@
-let   productsArray =[
-{id: 1, name :`iphon2 16`,price:8000000,stock:16,image:`/assets/img/iphone 16.webp`},
-{id:2,name:`iphone 12`,price:1400000,stock:20,image:`/assets/img/iphone 16.webp`}
+// app.js
 
-]
+// Array de productos
+let productsArray = [
+    {id: 1, name: 'iphone 16', price: 8000000, stock: 16, image: '/assets/img/iphone 16.webp'},
+    {id: 2, name: 'iphone 12', price: 1400000, stock: 20, image: '/assets/img/p12.jpg'}
+];
 
+// Carrito de compras
+let cart = [];
 
+// Función para mostrar productos
 function displayProducts() {
     const productsDiv = document.getElementById('container-items');
     productsDiv.innerHTML = '';
@@ -13,16 +18,114 @@ function displayProducts() {
         productDiv.classList.add('item');
         productDiv.innerHTML = `
             <figure>
-                    <img src="${product.image} " alt ="${product.name}">
-                </figure>
-                <div class="inf-produc">
-                    <h2>${product.name}</h2>
-					<p class="price">$${product.price}</p>
-                    <p class="price">stock: ${product.stock}</p>
-					<button class="añadir-carrito">Añadir al carrito</button>
-                </div>
+                <img src="${product.image}" alt="${product.name}">
+            </figure>
+            <div class="inf-produc">
+                <h2>${product.name}</h2>
+                <p class="price">$${product.price}</p>
+                <p class="stock">Stock: ${product.stock}</p>
+                <button class="añadir-carrito" onclick="addToCart(${product.id})">Añadir al carrito</button>
+            </div>
         `;
         productsDiv.appendChild(productDiv);
     });
 }
-displayProducts()
+
+// Función para añadir productos al carrito
+function addToCart(productId) {
+    const product = productsArray.find(p => p.id === productId);
+    if (!product || product.stock <= 0) {
+        alert('Producto fuera de stock');
+        return;
+    }
+
+    const cartItem = cart.find(item => item.id === productId);
+    if (cartItem) {
+        cartItem.quantity++;
+    } else {
+        cart.push({...product, quantity: 1});
+    }
+
+    product.stock--;
+    updateCart();
+    displayProducts();
+    // displayCart(); // Eliminar esta línea
+}
+
+// Función para mostrar el carrito
+function displayCart() {
+    const cartModal = document.getElementById('cart-modal');
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    
+    cartItemsDiv.innerHTML = '';
+    let total = 0;
+    
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        cartItemsDiv.innerHTML += `
+            <div class="cart-item">
+                <img src="${item.image}" alt="${item.name}" style="width: 5rem; height: 5rem;">
+                <h3>${item.name}</h3>
+                <p>Precio: $${item.price}</p>
+                <p>Cantidad: ${item.quantity}</p>
+                <p>Total: $${itemTotal}</p>
+                <button onclick="removeFromCart(${item.id})">Eliminar</button>
+            </div>
+        `;
+    });
+
+    cartTotalSpan.innerText = total;
+    cartModal.style.display = 'block';
+}
+
+// Función para eliminar un producto del carrito
+function removeFromCart(productId) {
+    const cartItem = cart.find(item => item.id === productId);
+    const product = productsArray.find(p => p.id === productId);
+
+    if (cartItem) {
+        cartItem.quantity--; // Disminuir la cantidad en el carrito
+        product.stock++; // Aumentar el stock del producto en inventario
+
+        // Si la cantidad en el carrito llega a 0, eliminar el producto del carrito
+        if (cartItem.quantity === 0) {
+            const cartItemIndex = cart.indexOf(cartItem);
+            cart.splice(cartItemIndex, 1); // Remover el producto del carrito
+        }
+    }
+    
+    updateCart();
+    displayProducts();
+    displayCart(); // Refresca la vista del carrito
+}
+
+// Función para vaciar el carrito
+function clearCart() {
+    cart.forEach(item => {
+        const product = productsArray.find(p => p.id === item.id);
+        if (product) {
+            product.stock += item.quantity; // Reponer el stock
+        }
+    });
+    cart = [];
+    
+    updateCart();
+    displayProducts();
+    displayCart();
+}
+
+// Función para cerrar el carrito
+function closeCart() {
+    document.getElementById('cart-modal').style.display = 'none';
+}
+
+// Función para actualizar el contador del carrito
+function updateCart() {
+    const cartCount = document.getElementById('cart-count');
+    cartCount.innerText = cart.reduce((count, item) => count + item.quantity, 0);
+}
+
+// Mostrar productos iniciales
+displayProducts();
