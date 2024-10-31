@@ -25,8 +25,6 @@ let productsArray = [
     {id: 21, name: 'iPad', price: 1400000, stock: 20, image: '/assets/img/iPad.png'}
 ];
 
-
-// Carrito de compras
 let cart = [];
 
 // Función para mostrar productos
@@ -69,7 +67,6 @@ function addToCart(productId) {
     product.stock--;
     updateCart();
     displayProducts();
-    // displayCart(); // Eliminar esta línea
 }
 
 // Función para mostrar el carrito
@@ -106,19 +103,18 @@ function removeFromCart(productId) {
     const product = productsArray.find(p => p.id === productId);
 
     if (cartItem) {
-        cartItem.quantity--; // Disminuir la cantidad en el carrito
-        product.stock++; // Aumentar el stock del producto en inventario
+        cartItem.quantity--; 
+        product.stock++; 
 
-        // Si la cantidad en el carrito llega a 0, eliminar el producto del carrito
         if (cartItem.quantity === 0) {
             const cartItemIndex = cart.indexOf(cartItem);
-            cart.splice(cartItemIndex, 1); // Remover el producto del carrito
+            cart.splice(cartItemIndex, 1);
         }
     }
     
     updateCart();
     displayProducts();
-    displayCart(); // Refresca la vista del carrito
+    displayCart(); 
 }
 
 // Función para vaciar el carrito
@@ -126,7 +122,7 @@ function clearCart() {
     cart.forEach(item => {
         const product = productsArray.find(p => p.id === item.id);
         if (product) {
-            product.stock += item.quantity; // Reponer el stock
+            product.stock += item.quantity; 
         }
     });
     cart = [];
@@ -141,11 +137,25 @@ function closeCart() {
     document.getElementById('cart-modal').style.display = 'none';
 }
 
-
+// Función para actualizar el contador del carrito
 function updateCart() {
     const cartCount = document.getElementById('cart-count');
     cartCount.innerText = cart.reduce((count, item) => count + item.quantity, 0);
 }
 
+// Función para completar la compra
+function completePurchase() {
+    if (cart.length === 0) {
+        alert("El carrito está vacío. Agrega productos antes de comprar.");
+        return;
+    }
 
+    alert("¡Compra realizada con éxito! Gracias por su compra.");
+    cart = []; 
+    updateCart(); 
+    displayProducts(); 
+    location.reload();
+}
+
+// Inicializa la visualización de productos
 displayProducts();

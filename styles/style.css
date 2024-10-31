@@ -108,7 +108,7 @@ header{
     border:2px double #fff;
     border-radius:15rem ;
     cursor: pointer;
-    margin: 2rem;
+    margin: 1rem;
 }
 .cart-item > button{
     padding: 1rem;
