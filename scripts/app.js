@@ -1,19 +1,17 @@
-// app.js
-
 // Array de productos
 let productsArray = [
     {id: 1, name: 'iphone 16', price: 8000000, stock: 16, image: '/assets/img/iphone 16.webp'},
-    {id: 2, name: 'iphone 16 por max', price: 1400000, stock: 20, image: '/assets/img/16 pro max.webp'},
+    {id: 2, name: 'iphone 16 pro max', price: 1400000, stock: 20, image: '/assets/img/16 pro max.webp'},
     {id: 3, name: 'iphone 16 pro', price: 1400000, stock: 20, image: '/assets/img/233695-233703-iphone-16-pro-black.webp'},
     {id: 4, name: 'iphone 16 plus', price: 1400000, stock: 20, image: '/assets/img/iphone-16-plus-rosa.webp'},
-    {id: 5, name: 'iphone 15 pro max ', price: 1400000, stock: 20, image: '/assets/img/15promax-pro.webp'},
+    {id: 5, name: 'iphone 15 pro max', price: 1400000, stock: 20, image: '/assets/img/15promax-pro.webp'},
     {id: 6, name: 'iphone 15 pro', price: 1400000, stock: 20, image: '/assets/img/iphone-15-pro-blanco-titanio-ambos-lados.webp'},
     {id: 7, name: 'iphone 15', price: 1400000, stock: 20, image: '/assets/img/iphone-15-azul-ambas-caras.webp'},
     {id: 8, name: 'iphone 14 pro max', price: 1400000, stock: 20, image: '/assets/img/14 pro max.webp'},
     {id: 9, name: 'iphone 14 pro', price: 1400000, stock: 20, image: '/assets/img/14 pro.webp'},
     {id: 10, name: 'iphone 14', price: 1400000, stock: 20, image: '/assets/img/iphone 14.webp'},
     {id: 11, name: 'MacBook Pro', price: 1400000, stock: 20, image: '/assets/img/MacBook Pro.png'},
-    {id: 12, name: 'MacBook Air ', price: 1400000, stock: 20, image: '/assets/img/MacBook Air.png'},
+    {id: 12, name: 'MacBook Air', price: 1400000, stock: 20, image: '/assets/img/MacBook Air.png'},
     {id: 13, name: 'AirPods 4', price: 1400000, stock: 20, image: '/assets/img/AirPods 4.png'},
     {id: 14, name: 'AirPods Pro 2', price: 1400000, stock: 20, image: '/assets/img/AirPods Pro 2.png'},
     {id: 15, name: 'AirPods Max', price: 1400000, stock: 20, image: '/assets/img/AirPods Max.webp'},
@@ -27,11 +25,11 @@ let productsArray = [
 
 let cart = [];
 
-// Función para mostrar productos
-function displayProducts() {
+
+function displayProducts(filteredProducts = productsArray) {
     const productsDiv = document.getElementById('container-items');
     productsDiv.innerHTML = '';
-    productsArray.forEach(product => {
+    filteredProducts.forEach(product => {
         const productDiv = document.createElement('div');
         productDiv.classList.add('item');
         productDiv.innerHTML = `
@@ -49,7 +47,7 @@ function displayProducts() {
     });
 }
 
-// Función para añadir productos al carrito
+
 function addToCart(productId) {
     const product = productsArray.find(p => p.id === productId);
     if (!product || product.stock <= 0) {
@@ -69,7 +67,6 @@ function addToCart(productId) {
     displayProducts();
 }
 
-// Función para mostrar el carrito
 function displayCart() {
     const cartModal = document.getElementById('cart-modal');
     const cartItemsDiv = document.getElementById('cart-items');
@@ -97,18 +94,18 @@ function displayCart() {
     cartModal.style.display = 'block';
 }
 
-// Función para eliminar un producto del carrito
 function removeFromCart(productId) {
     const cartItem = cart.find(item => item.id === productId);
     const product = productsArray.find(p => p.id === productId);
 
     if (cartItem) {
         cartItem.quantity--; 
-        product.stock++; 
+        product.stock++;
 
+        
         if (cartItem.quantity === 0) {
             const cartItemIndex = cart.indexOf(cartItem);
-            cart.splice(cartItemIndex, 1);
+            cart.splice(cartItemIndex, 1); 
         }
     }
     
@@ -117,12 +114,11 @@ function removeFromCart(productId) {
     displayCart(); 
 }
 
-// Función para vaciar el carrito
 function clearCart() {
     cart.forEach(item => {
         const product = productsArray.find(p => p.id === item.id);
         if (product) {
-            product.stock += item.quantity; 
+            product.stock += item.quantity; // Reponer el stock
         }
     });
     cart = [];
@@ -132,18 +128,17 @@ function clearCart() {
     displayCart();
 }
 
-// Función para cerrar el carrito
+
 function closeCart() {
     document.getElementById('cart-modal').style.display = 'none';
 }
 
-// Función para actualizar el contador del carrito
 function updateCart() {
     const cartCount = document.getElementById('cart-count');
     cartCount.innerText = cart.reduce((count, item) => count + item.quantity, 0);
 }
 
-// Función para completar la compra
+
 function completePurchase() {
     if (cart.length === 0) {
         alert("El carrito está vacío. Agrega productos antes de comprar.");
@@ -151,11 +146,22 @@ function completePurchase() {
     }
 
     alert("¡Compra realizada con éxito! Gracias por su compra.");
-    cart = []; 
+    cart = []; // Vaciar el carrito
+    productsArray.forEach(product => product.stock += product.quantity); // 
+
     updateCart(); 
     displayProducts(); 
-    location.reload();
+    displayCart(); 
+    location.reload(); 
 }
 
-// Inicializa la visualización de productos
+
+function searchProducts() {
+    const searchTerm = document.getElementById('search-bar').value.toLowerCase();
+    const filteredProducts = productsArray.filter(product => 
+        product.name.toLowerCase().includes(searchTerm)
+    );
+    displayProducts(filteredProducts);
+}
+
 displayProducts();
