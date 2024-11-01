@@ -131,6 +131,11 @@ header{
     cursor:pointer;
     font-size: 2rem;
 }
+input{
+    border: none;
+    padding: 1rem;
+    border-radius: 3rem;
+}
 .modal-content>h2{
     margin: 2rem;
 }
