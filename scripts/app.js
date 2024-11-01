@@ -1,4 +1,3 @@
-// Array de productos
 let productsArray = [
     {id: 1, name: 'iphone 16', price: 8000000, stock: 16, image: '/assets/img/iphone 16.webp'},
     {id: 2, name: 'iphone 16 pro max', price: 1400000, stock: 20, image: '/assets/img/16 pro max.webp'},
@@ -23,10 +22,8 @@ let productsArray = [
     {id: 21, name: 'iPad', price: 1400000, stock: 20, image: '/assets/img/iPad.png'}
 ];
 
-// Carrito de compras
 let cart = [];
 
-// Función para mostrar productos
 function displayProducts(filteredProducts = productsArray) {
     const productsDiv = document.getElementById('container-items');
     productsDiv.innerHTML = '';
@@ -48,7 +45,6 @@ function displayProducts(filteredProducts = productsArray) {
     });
 }
 
-// Función para añadir productos al carrito
 function addToCart(productId) {
     const product = productsArray.find(p => p.id === productId);
     if (!product || product.stock <= 0) {
@@ -68,7 +64,6 @@ function addToCart(productId) {
     displayProducts();
 }
 
-// Función para mostrar el carrito
 function displayCart() {
     const cartModal = document.getElementById('cart-modal');
     const cartItemsDiv = document.getElementById('cart-items');
@@ -96,33 +91,30 @@ function displayCart() {
     cartModal.style.display = 'block';
 }
 
-// Función para eliminar un producto del carrito
 function removeFromCart(productId) {
     const cartItem = cart.find(item => item.id === productId);
     const product = productsArray.find(p => p.id === productId);
 
     if (cartItem) {
-        cartItem.quantity--; // Disminuir la cantidad en el carrito
-        product.stock++; // Aumentar el stock del producto en inventario
+        cartItem.quantity--;
+        product.stock++;
 
-        // Si la cantidad en el carrito llega a 0, eliminar el producto del carrito
         if (cartItem.quantity === 0) {
             const cartItemIndex = cart.indexOf(cartItem);
-            cart.splice(cartItemIndex, 1); // Remover el producto del carrito
+            cart.splice(cartItemIndex, 1);
         }
     }
     
     updateCart();
     displayProducts();
-    displayCart(); // Refresca la vista del carrito
+    displayCart();
 }
 
-// Función para vaciar el carrito
 function clearCart() {
     cart.forEach(item => {
         const product = productsArray.find(p => p.id === item.id);
         if (product) {
-            product.stock += item.quantity; // Reponer el stock
+            product.stock += item.quantity;
         }
     });
     cart = [];
@@ -132,18 +124,15 @@ function clearCart() {
     displayCart();
 }
 
-// Función para cerrar el carrito
 function closeCart() {
     document.getElementById('cart-modal').style.display = 'none';
 }
 
-// Función para actualizar el contador del carrito
 function updateCart() {
     const cartCount = document.getElementById('cart-count');
     cartCount.innerText = cart.reduce((count, item) => count + item.quantity, 0);
 }
 
-// Función para completar la compra
 function completePurchase() {
     if (cart.length === 0) {
         alert("El carrito está vacío. Agrega productos antes de comprar.");
@@ -151,15 +140,14 @@ function completePurchase() {
     }
 
     alert("¡Compra realizada con éxito! Gracias por su compra.");
-    cart = []; // Vaciar el carrito
-    productsArray.forEach(product => product.stock += product.quantity); // Restaurar el stock
-    updateCart(); // Actualizar contador del carrito
-    displayProducts(); // Actualizar visualización de productos
-    displayCart(); // Actualizar visualización del carrito
-    location.reload(); // Reiniciar la página
+    cart = [];
+    productsArray.forEach(product => product.stock += product.quantity);
+    updateCart();
+    displayProducts();
+    displayCart();
+    location.reload();
 }
 
-// Función de búsqueda de productos
 function searchProducts() {
     const searchTerm = document.getElementById('search-bar').value.toLowerCase();
     const filteredProducts = productsArray.filter(product => 
@@ -168,5 +156,4 @@ function searchProducts() {
     displayProducts(filteredProducts);
 }
 
-// Mostrar productos al cargar la página
 displayProducts();
